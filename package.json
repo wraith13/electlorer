@@ -1,12 +1,12 @@
 {
-  "name": "electron-quick-start",
+  "name": "electlorer",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
+  "description": "GUI file manager",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "repository": "https://github.com/electron/electron-quick-start",
+  "repository": "https://github.com/wraith13/electlorer",
   "keywords": [
     "Electron",
     "quick",
@@ -14,7 +14,7 @@
     "tutorial",
     "demo"
   ],
-  "author": "GitHub",
+  "author": "wraith13",
   "license": "SEE LICENSE IN LICENSE_1_0.txt",
   "devDependencies": {
     "electron": "^4.0.3"
