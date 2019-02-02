@@ -2,7 +2,7 @@
   "name": "electlorer",
   "version": "1.0.0",
   "description": "GUI file manager",
-  "main": "main.js",
+  "main": "out/main.js",
   "scripts": {
     "start": "electron ."
   },
