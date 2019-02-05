@@ -31,7 +31,8 @@
     },
     "files": [
         "src/main.ts",
-        "src/renderer.ts"
+        "src/renderer.ts",
+        "src/minamo.ts",
     ],
     "exclude": [
     ]
