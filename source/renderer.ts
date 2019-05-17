@@ -11,9 +11,15 @@ minamo.dom.appendChildren(document.body, { tag: "p", children: "Hello, minamo.js
 fs.readdir
 (
     "/",
-    (_err, files) => minamo.dom.appendChildren
+    (_err, files) =>
     (
-        document.body,
-        files.map(i => ({ tag: "p", children: i}))
+        {
+            tag: "ul",
+            children: minamo.dom.appendChildren
+            (
+                document.body,
+                files.map(i => ({ tag: "li", children: i}))
+            )
+        }
     )
 );
