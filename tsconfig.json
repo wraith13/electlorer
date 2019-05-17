@@ -30,9 +30,9 @@
         "outDir": "out"
     },
     "files": [
-        "src/main.ts",
-        "src/renderer.ts",
-        "src/minamo.ts",
+        "source/main.ts",
+        "source/renderer.ts",
+        "source/minamo.ts",
     ],
     "exclude": [
     ]
