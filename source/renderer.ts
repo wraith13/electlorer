@@ -7,10 +7,8 @@ import * as fs from 'fs';
 
 module fx
 {
-    export function readdir(path : string)
-        : Promise<{ error : NodeJS.ErrnoException, files : string[] }>
-    {
-        return new Promise
+    export const readdir = (path : string) : Promise<{ error : NodeJS.ErrnoException, files : string[] }> =>
+        new Promise
         (
             resolve => fs.readdir
             (
@@ -24,24 +22,18 @@ module fx
                 )
             )
         );
-    }
 
-    export function exists(path : string) : Promise<boolean>
-    {
-        return new Promise
+    export const exists = (path : string) : Promise<boolean> =>  new Promise
+    (
+        resolve => fs.exists
         (
-            resolve => fs.exists
-            (
-                path,
-                exists => resolve(exists)
-            )
-        );
-    }
+            path,
+            exists => resolve(exists)
+        )
+    );
 
-    export function readFile(path : string)
-        : Promise<{ err : NodeJS.ErrnoException, data : Buffer }>
-    {
-        return new Promise
+    export const readFile = (path : string) : Promise<{ err : NodeJS.ErrnoException, data : Buffer }> =>
+        new Promise
         (
             resolve => fs.readFile
             (
@@ -49,7 +41,6 @@ module fx
                 (err : NodeJS.ErrnoException, data : Buffer) => resolve({ err, data })
             )
         );
-    }
 }
 
 document.write("🐕");
