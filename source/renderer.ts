@@ -5,21 +5,22 @@
 import { minamo } from "./minamo";
 import * as fs from 'fs';
 
-const readDir = async (parent: Element, path: string) => minamo.dom.appendChildren
+const renderDirs = async (parent: Element, dirs: string[]) => minamo.dom.appendChildren
 (
     parent,
     {
         tag: "ul",
-        children: (await fs.promises.readdir(path)).map(i => ({ tag: "li", children: i}))
+        class: "dirs",
+        children: dirs.map(i => ({ tag: "li", children: i}))
     }
 );
 
-const onload = () =>
+const onload = async () =>
 {
     document.write("🐕");
     minamo.dom.appendChildren(document.body, { tag: "p", children: "Hello, minamo.js!"});
     
-    readDir(document.body, "/");
+    renderDirs(document.body, await fs.promises.readdir("/"));
 };
 
 onload();
