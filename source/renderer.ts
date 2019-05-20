@@ -5,55 +5,21 @@
 import { minamo } from "./minamo";
 import * as fs from 'fs';
 
-module fx
-{
-    export const readdir = (path : string) : Promise<{ error : NodeJS.ErrnoException, files : string[] }> =>
-        new Promise
-        (
-            resolve => fs.readdir
-            (
-                path,
-                (error : NodeJS.ErrnoException, files : string[]) => resolve
-                (
-                    {
-                        error,
-                        files
-                    }
-                )
-            )
-        );
-
-    export const exists = (path : string) : Promise<boolean> =>  new Promise
-    (
-        resolve => fs.exists
-        (
-            path,
-            exists => resolve(exists)
-        )
-    );
-
-    export const readFile = (path : string) : Promise<{ err : NodeJS.ErrnoException, data : Buffer }> =>
-        new Promise
-        (
-            resolve => fs.readFile
-            (
-                path,
-                (err : NodeJS.ErrnoException, data : Buffer) => resolve({ err, data })
-            )
-        );
-}
-
-document.write("🐕");
-minamo.dom.appendChildren(document.body, { tag: "p", children: "Hello, minamo.js!"});
-
 const readDir = async (parent: Element, path: string) => minamo.dom.appendChildren
 (
     parent,
     {
         tag: "ul",
-        children: (await fx.readdir(path)).files.map(i => ({ tag: "li", children: i}))
+        children: (await fs.promises.readdir(path)).map(i => ({ tag: "li", children: i}))
     }
 );
 
-readDir(document.body, "/");
+const onload = () =>
+{
+    document.write("🐕");
+    minamo.dom.appendChildren(document.body, { tag: "p", children: "Hello, minamo.js!"});
+    
+    readDir(document.body, "/");
+};
 
+onload();
