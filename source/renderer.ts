@@ -19,8 +19,7 @@ const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChi
                 (
                     {
                         tag: "span",
-                        children: i,
-                        onclick: async () => await renderDirs(result, `${path}/${i}`)
+                        children: `[${i}]`
                     }
                 );
                 const result = <HTMLLIElement>minamo.dom.make
@@ -30,6 +29,18 @@ const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChi
                         children: label
                     }
                 )
+                const open = async () =>
+                {
+                    label.onclick = () => { };
+                    await renderDirs(result, `${path}/${i}`);
+                    label.onclick = close;
+                };
+                const close = async () =>
+                {
+                    minamo.dom.removeChildren(result, child => label !== child);
+                    label.onclick = open;
+                };
+                label.onclick = open;
                 return result;
             }
         )
