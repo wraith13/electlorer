@@ -32,7 +32,11 @@ const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChi
                 const open = async () =>
                 {
                     label.onclick = () => { };
-                    await renderDirs(result, `${path}/${i}`);
+                    await renderDirs
+                    (
+                        result,
+                        `${"/" === path ? "": path}/${i}`
+                    );
                     label.onclick = close;
                 };
                 const close = async () =>
