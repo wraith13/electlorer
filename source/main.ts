@@ -1,3 +1,4 @@
+///<reference path="../node_modules/electron/electron.d.ts"/>
 import * as fs from 'fs';
 // Modules to control application life and create native browser window
 const {app, BrowserWindow} = require('electron')
