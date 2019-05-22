@@ -15,6 +15,7 @@ const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChi
         (
             i =>
             {
+                const iPath = `${"/" === path ? "": path}/${i}`;
                 const label = <HTMLSpanElement>minamo.dom.make
                 (
                     {
@@ -31,16 +32,14 @@ const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChi
                 )
                 const open = async () =>
                 {
+                    console.log(`open "${iPath}"`);
                     label.onclick = () => { };
-                    await renderDirs
-                    (
-                        result,
-                        `${"/" === path ? "": path}/${i}`
-                    );
+                    await renderDirs(result, iPath);
                     label.onclick = close;
                 };
                 const close = async () =>
                 {
+                    console.log(`close "${iPath}"`);
                     minamo.dom.removeChildren(result, child => label !== child);
                     label.onclick = open;
                 };
