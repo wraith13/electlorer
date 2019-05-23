@@ -1,24 +1,29 @@
 ///<reference path="../node_modules/electron/electron.d.ts"/>
 import * as fs from 'fs';
 // Modules to control application life and create native browser window
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow} = require('electron');
 
 let config: any;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let mainWindow
+let mainWindow: Electron.BrowserWindow;
 
 async function createWindow () {
-    const json = await fs.promises.readFile("./config.json");
+    const json = (await fs.promises.readFile("./config.json")).toString();
     console.log(`config.json: ${json}`);
-    config = JSON.parse(json.toString());
+    config = JSON.parse(json);
 
     // Create the browser window.
     mainWindow = new BrowserWindow({width: 800, height: 600})
 
     // and load the index.html of the app.
-    mainWindow.loadFile('index.html')
+    mainWindow.webContents.on
+    (
+        "did-finish-load",
+        () => mainWindow.loadURL(`javascript:config=JSON.parse(${JSON.stringify(json)});`)
+    );
+    mainWindow.loadFile('index.html');
 
     // Open the DevTools.
     if ("open" === config.devTools)
