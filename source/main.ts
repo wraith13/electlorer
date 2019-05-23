@@ -21,7 +21,8 @@ async function createWindow () {
     mainWindow.webContents.on
     (
         "did-finish-load",
-        () => mainWindow.loadURL(`javascript:config=JSON.parse(${JSON.stringify(json)});`)
+        //() => mainWindow.loadURL(`javascript:config=JSON.parse(${JSON.stringify(json)});`)
+        () => mainWindow.loadURL(`javascript:renderer.setConfig(${JSON.stringify(json)});`)
     );
     mainWindow.loadFile('index.html');
 

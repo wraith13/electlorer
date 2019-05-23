@@ -5,6 +5,8 @@
 import { minamo } from "./minamo";
 import * as fs from 'fs';
 
+let config: any;
+
 const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChildren
 (
     parent,
@@ -57,5 +59,11 @@ const onload = async () =>
     
     renderDirs(document.body, "/");
 };
-
 onload();
+
+export const setConfig = (json: string) =>
+{
+    config = JSON.parse(json);
+    console.log(`config: ${JSON.stringify(config)}`);
+    document.title = config.title;
+};
