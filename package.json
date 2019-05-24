@@ -20,5 +20,8 @@
     "electron": "^4.0.3",
     "less": "^3.9.0",
     "typescript": "^3.3.1"
+  },
+  "dependencies": {
+    "octicons": "^8.5.0"
   }
 }
