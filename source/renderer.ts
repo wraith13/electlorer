@@ -4,7 +4,7 @@
 
 import { minamo } from "./minamo";
 import * as fs from 'fs';
-import * as octicons from "octicons";
+import octicons from "octicons";
 
 let config: any;
 

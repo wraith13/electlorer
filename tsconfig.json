@@ -27,7 +27,8 @@
         "skipLibCheck": false,
         "pretty": false,
         "noEmitOnError": true,
-        "outDir": "out"
+        "outDir": "out",
+        "resolveJsonModule": true
     },
     "files": [
         "source/main.ts",
