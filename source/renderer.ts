@@ -4,7 +4,7 @@
 
 import { minamo } from "./minamo";
 import * as fs from 'fs';
-import octicons from "octicons";
+import octicons, { Octicon } from "octicons";
 
 let config: any;
 
@@ -53,6 +53,15 @@ const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChi
     }
 );
 
+const makeSVG = (octicon: Octicon): SVGElement => <SVGElement>minamo.dom.make
+(
+    {
+        tag: "div",
+        innerHTML: octicon.toSVG()
+    }
+).firstChild;
+
+
 const onload = async () =>
 {
     document.write("🐕");
@@ -64,13 +73,7 @@ const onload = async () =>
                 tag: "p",
                 children: "Hello, minamo.js!"
             },
-            minamo.dom.make
-            (
-                {
-                    tag: "div",
-                    innerHTML: octicons["bell"].toSVG()
-                }
-            ).firstChild
+            makeSVG(octicons.bell)
         ]
     );
     
