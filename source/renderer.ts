@@ -4,7 +4,38 @@
 
 import { minamo } from "./minamo";
 import * as fs from 'fs';
-import octicons, { Octicon } from "octicons";
+/*
+import * as octicons from "octicons";
+/*/
+import * as octiconsSource from "../node_modules/octicons/build/data.json";
+interface Figma
+{
+    id: string;
+    file: string;
+}
+interface Options
+{
+    "version": string;
+    "width": number;
+    "height": number;
+    "viewBox": string;
+    "class": string;
+    "aria-hidden": string;
+}
+interface Octicon
+{
+    name: string;
+    figma: Figma,
+    keywords: string[],
+    width: number;
+    height: number;
+    path: string;
+    symbol: string;
+    options: Options;
+    toSVG: () => string;
+}
+const octicons = <{ [key in keyof typeof octiconsSource]:Octicon }>require("../node_modules/octicons");
+//*/
 
 let config: any;
 
