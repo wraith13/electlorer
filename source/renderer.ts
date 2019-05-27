@@ -39,51 +39,6 @@ const octicons = <{ [key in keyof typeof octiconsSource]:Octicon }>require("../n
 
 let config: any;
 
-const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChildren
-(
-    parent,
-    {
-        tag: "ul",
-        class: "dirs",
-        children: (await fs.promises.readdir(path)).map
-        (
-            i =>
-            {
-                const iPath = `${"/" === path ? "": path}/${i}`;
-                const label = <HTMLSpanElement>minamo.dom.make
-                (
-                    {
-                        tag: "span",
-                        children: `[${i}]`
-                    }
-                );
-                const result = <HTMLLIElement>minamo.dom.make
-                (
-                    {
-                        tag: "li",
-                        children: label
-                    }
-                )
-                const open = async () =>
-                {
-                    console.log(`open "${iPath}"`);
-                    label.onclick = () => { };
-                    await renderDirs(result, iPath);
-                    label.onclick = close;
-                };
-                const close = async () =>
-                {
-                    console.log(`close "${iPath}"`);
-                    minamo.dom.removeChildren(result, child => label !== child);
-                    label.onclick = open;
-                };
-                label.onclick = open;
-                return result;
-            }
-        )
-    }
-);
-
 const makeSVG = (octicon: Octicon): SVGElement => <SVGElement>minamo.dom.make
 (
     {
@@ -92,6 +47,73 @@ const makeSVG = (octicon: Octicon): SVGElement => <SVGElement>minamo.dom.make
     }
 ).firstChild;
 
+const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChildren
+(
+    parent,
+    {
+        tag: "ul",
+        class: "dirs",
+        children:
+        (
+            await Promise.all<HTMLLIElement>
+            (
+                (await fs.promises.readdir(path)).map
+                (
+                    async i =>
+                    {
+                        let result = <HTMLLIElement>null;
+                        try
+                        {
+                            const iPath = `${"/" === path ? "": path}/${i}`;
+                            const stat = await fs.promises.stat(iPath);
+                            if (stat.isDirectory())
+                            {
+                                const label = <HTMLSpanElement>minamo.dom.make
+                                (
+                                    {
+                                        tag: "span",
+                                        children:
+                                        [
+                                            makeSVG(octicons["file-directory"]),
+                                            `${i}`
+                                        ]
+                                    }
+                                );
+                                result = <HTMLLIElement>minamo.dom.make
+                                (
+                                    {
+                                        tag: "li",
+                                        children: label
+                                    }
+                                )
+                                const open = async () =>
+                                {
+                                    console.log(`open "${iPath}"`);
+                                    label.onclick = () => { };
+                                    await renderDirs(result, iPath);
+                                    label.onclick = close;
+                                };
+                                const close = async () =>
+                                {
+                                    console.log(`close "${iPath}"`);
+                                    minamo.dom.removeChildren(result, child => label !== child);
+                                    label.onclick = open;
+                                };
+                                label.onclick = open;
+                            }
+                        }
+                        catch(err)
+                        {
+                            console.error(err);
+                        }
+                        return result;
+                    }
+                )
+            )
+        )
+        .filter(i => i)
+    }
+);
 
 const onload = async () =>
 {
