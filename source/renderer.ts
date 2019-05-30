@@ -84,10 +84,10 @@ const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChi
     }
 );
 
-const onload = async () =>
+export const onload = async () =>
 {
     document.write("🐕");
-    minamo.dom.appendChildren
+    minamo.dom.replaceChildren
     (
         document.body,
         [
@@ -101,7 +101,6 @@ const onload = async () =>
     
     renderDirs(document.body, "/");
 };
-onload();
 
 export const setConfig = (json: string) =>
 {
