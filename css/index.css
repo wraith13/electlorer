@@ -1,3 +1,12 @@
+ul.dirs {
+  padding-left: 0px;
+}
 ul.dirs > li {
   list-style: none;
+}
+ul.dirs > li > span > svg {
+  padding-right: 4px;
+}
+ul.dirs > li > ul.dirs {
+  padding-left: 20px;
 }

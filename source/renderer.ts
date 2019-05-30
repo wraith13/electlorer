@@ -86,7 +86,6 @@ const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChi
 
 export const onload = async () =>
 {
-    document.write("🐕");
     minamo.dom.replaceChildren
     (
         document.body,
