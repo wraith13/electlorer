@@ -9,12 +9,11 @@ import octicons, { Octicon } from "typed-octicons";
 let config: any;
 
 const makeSVG = (octicon: Octicon): SVGElement => <SVGElement>minamo.dom.make
-(
-    {
-        tag: "div",
-        innerHTML: octicon.toSVG()
-    }
-).firstChild;
+({
+    tag: "div",
+    innerHTML: octicon.toSVG()
+})
+.firstChild;
 
 const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChildren
 (
@@ -38,23 +37,19 @@ const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChi
                             if (stat.isDirectory())
                             {
                                 const label = <HTMLSpanElement>minamo.dom.make
-                                (
-                                    {
-                                        tag: "span",
-                                        children:
-                                        [
-                                            makeSVG(octicons["file-directory"]),
-                                            `${i}`
-                                        ]
-                                    }
-                                );
+                                ({
+                                    tag: "span",
+                                    children:
+                                    [
+                                        makeSVG(octicons["file-directory"]),
+                                        `${i}`
+                                    ]
+                                });
                                 result = <HTMLLIElement>minamo.dom.make
-                                (
-                                    {
-                                        tag: "li",
-                                        children: label
-                                    }
-                                )
+                                ({
+                                    tag: "li",
+                                    children: label
+                                });
                                 const open = async () =>
                                 {
                                     console.log(`open "${iPath}"`);
@@ -74,7 +69,21 @@ const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChi
                         catch(err)
                         {
                             console.error(err);
-                        }
+                            const label = <HTMLSpanElement>minamo.dom.make
+                            ({
+                                tag: "span",
+                                children:
+                                [
+                                    makeSVG(octicons["circle-slash"]),
+                                    `${i}`
+                                ]
+                            });
+                            result = <HTMLLIElement>minamo.dom.make
+                            ({
+                                tag: "li",
+                                children: label
+                            });
+                    }
                         return result;
                     }
                 )
