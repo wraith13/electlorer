@@ -345,6 +345,21 @@ export module minamo
             const padding = 0 < paddingLength ? "00000000000000000000".substr(-paddingLength): "";
             return `${sign}${padding}${core}`;
         }
+        export const NYI = <T>(_: T = null): T => { throw new Error("Not Yet Implement!"); };
+    }
+    export module environment
+    {
+        export const isIE = (): boolean => core.NYI(false);
+        export const isEdge = (): boolean => core.NYI(false);
+        export const isSafari = (): boolean => core.NYI(false);
+        export const isFirefox = (): boolean => core.NYI(false);
+        export const isChrome = (): boolean => core.NYI(false);
+        export const isPC = (): boolean => core.NYI(false);
+        export const isWindows = (): boolean => core.NYI(false);
+        export const isMac = (): boolean => core.NYI(false);
+        export const isLinux = (): boolean => core.NYI(false);
+        export const isiOs = (): boolean => core.NYI(false);
+        export const isiAndroid = (): boolean => core.NYI(false);
     }
     export module cookie
     {
@@ -673,7 +688,12 @@ export module minamo
     
     export module dom
     {
-        export const make = (arg: any): Node =>
+        export function make<T extends Node>(node: T): T;
+        export function make(text: string): Text;
+        export function make<T extends Element>(constructor: { new (): T, prototype: T }): (arg: any) => T;
+        export function make(constructor: { new (): HTMLHeadingElement, prototype: HTMLHeadingElement }, level: number): (arg: any) => HTMLHeadingElement;
+        export function make(arg: any): Node;
+        export function make(arg: any, level?: number): any
         {
             if (arg instanceof Node)
             {
@@ -683,9 +703,27 @@ export module minamo
             {
                 return document.createTextNode(arg);
             }
-            return set(document.createElement(arg.tag), arg);
-        };
-        export const set = (element: Element, arg: any): Node =>
+            if (arg.prototype)
+            {
+                let tag = arg.name.replace(/HTML(.*)Element/, "$1".toLowerCase());
+                switch(tag)
+                {
+                    case "anchor":
+                        tag = "a";
+                        break;
+                    case "heading":
+                        tag = `h${level}`;
+                        break;
+                }
+                return arg2 => set(document.createElement(tag), arg2);
+            }
+            if (arg.outerHTML)
+            {
+                return make(HTMLDivElement)({innerHTML: arg.outerHTML}).firstChild;
+            }
+        return set(document.createElement(arg.tag), arg);
+        }
+        export const set = <T extends Element>(element: T, arg: any): T =>
         {
             core.objectForEach
             (
