@@ -8,12 +8,16 @@ import octicons, { Octicon } from "typed-octicons";
 
 let config: any;
 
-const makeSVG = (octicon: Octicon): SVGElement => <SVGElement>minamo.dom.make
+const makeOcticonSVG = (octicon: Octicon | keyof typeof octicons) => <SVGElement>minamo.dom.make
 ({
-    tag: "div",
-    innerHTML: octicon.toSVG()
-})
-.firstChild;
+    outerHTML:
+        (
+            "string" === typeof octicon ?
+            octicons[octicon]:
+            octicon
+        )
+        .toSVG()
+});
 
 const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChildren
 (
@@ -36,18 +40,16 @@ const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChi
                             const stat = await fs.promises.stat(iPath);
                             if (stat.isDirectory())
                             {
-                                const label = <HTMLSpanElement>minamo.dom.make
+                                const label = minamo.dom.make(HTMLSpanElement)
                                 ({
-                                    tag: "span",
                                     children:
                                     [
-                                        makeSVG(octicons["file-directory"]),
+                                        makeOcticonSVG("file-directory"),
                                         `${i}`
                                     ]
                                 });
-                                result = <HTMLLIElement>minamo.dom.make
+                                result = minamo.dom.make(HTMLLIElement)
                                 ({
-                                    tag: "li",
                                     children: label
                                 });
                                 const open = async () =>
@@ -69,21 +71,19 @@ const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChi
                         catch(err)
                         {
                             console.error(err);
-                            const label = <HTMLSpanElement>minamo.dom.make
+                            const label = minamo.dom.make(HTMLSpanElement)
                             ({
-                                tag: "span",
                                 children:
                                 [
-                                    makeSVG(octicons["circle-slash"]),
+                                    makeOcticonSVG("circle-slash"),
                                     `${i}`
                                 ]
                             });
-                            result = <HTMLLIElement>minamo.dom.make
+                            result = minamo.dom.make(HTMLLIElement)
                             ({
-                                tag: "li",
                                 children: label
                             });
-                    }
+                        }
                         return result;
                     }
                 )
@@ -103,10 +103,9 @@ export const onload = async () =>
                 tag: "p",
                 children: "Hello, minamo.js!"
             },
-            makeSVG(octicons.bell)
+            makeOcticonSVG("bell")
         ]
     );
-    
     renderDirs(document.body, "/");
 };
 
