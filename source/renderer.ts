@@ -19,6 +19,65 @@ const makeOcticonSVG = (octicon: Octicon | keyof typeof octicons) => <SVGElement
         .toSVG()
 });
 
+const renderDir = async (path: string): Promise<HTMLLIElement> =>
+{
+    let result = <HTMLLIElement>null;
+    const name = path.replace(/.*\/([^\/]+)/, "$1")
+    try
+    {
+        const stat = await fs.promises.stat(path);
+        if (stat.isDirectory())
+        {
+            const label = minamo.dom.make(HTMLSpanElement)
+            ({
+                children:
+                [
+                    makeOcticonSVG("file-directory"),
+                    `${name}`
+                ]
+            });
+            result = minamo.dom.make(HTMLLIElement)
+            ({
+                children: label
+            });
+            const open = async () =>
+            {
+                console.log(`open "${path}"`);
+                label.onclick = () => { };
+                await renderDirs(result, path);
+                label.onclick = close;
+            };
+            const close = async () =>
+            {
+                console.log(`close "${path}"`);
+                minamo.dom.removeChildren(result, child => label !== child);
+                label.onclick = open;
+            };
+            label.onclick = open;
+        }
+        else
+        {
+            //  file...
+        }
+    }
+    catch(err)
+    {
+        console.error(err);
+        const label = minamo.dom.make(HTMLSpanElement)
+        ({
+            children:
+            [
+                makeOcticonSVG("circle-slash"),
+                `${name}`
+            ]
+        });
+        result = minamo.dom.make(HTMLLIElement)
+        ({
+            children: label
+        });
+    }
+    return result;
+}
 const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChildren
 (
     parent,
@@ -31,61 +90,7 @@ const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChi
             (
                 (await fs.promises.readdir(path)).map
                 (
-                    async i =>
-                    {
-                        let result = <HTMLLIElement>null;
-                        try
-                        {
-                            const iPath = `${"/" === path ? "": path}/${i}`;
-                            const stat = await fs.promises.stat(iPath);
-                            if (stat.isDirectory())
-                            {
-                                const label = minamo.dom.make(HTMLSpanElement)
-                                ({
-                                    children:
-                                    [
-                                        makeOcticonSVG("file-directory"),
-                                        `${i}`
-                                    ]
-                                });
-                                result = minamo.dom.make(HTMLLIElement)
-                                ({
-                                    children: label
-                                });
-                                const open = async () =>
-                                {
-                                    console.log(`open "${iPath}"`);
-                                    label.onclick = () => { };
-                                    await renderDirs(result, iPath);
-                                    label.onclick = close;
-                                };
-                                const close = async () =>
-                                {
-                                    console.log(`close "${iPath}"`);
-                                    minamo.dom.removeChildren(result, child => label !== child);
-                                    label.onclick = open;
-                                };
-                                label.onclick = open;
-                            }
-                        }
-                        catch(err)
-                        {
-                            console.error(err);
-                            const label = minamo.dom.make(HTMLSpanElement)
-                            ({
-                                children:
-                                [
-                                    makeOcticonSVG("circle-slash"),
-                                    `${i}`
-                                ]
-                            });
-                            result = minamo.dom.make(HTMLLIElement)
-                            ({
-                                children: label
-                            });
-                        }
-                        return result;
-                    }
+                    async i => await renderDir(`${"/" === path ? "": path}/${i}`)
                 )
             )
         )
