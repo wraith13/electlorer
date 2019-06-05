@@ -695,6 +695,7 @@ export module minamo
         export function make(arg: any): Node;
         export function make(arg: any, level?: number): any
         {
+            core.existsOrThrow(arg);
             if (arg instanceof Node)
             {
                 return arg;
