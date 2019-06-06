@@ -5,8 +5,47 @@
 import { minamo } from "./minamo";
 import * as fs from 'fs';
 import octicons, { Octicon } from "typed-octicons";
+import * as os from "os";
+import * as child_process from "child_process";
 
 let config: any;
+
+const isWindows = "win32" === os.platform();
+
+export const regExpExecToArray = (regexp: RegExp, text: string): RegExpExecArray[] =>
+{
+    const result: RegExpExecArray[] = [];
+    let match: RegExpExecArray;
+    while(match = regexp.exec(text))
+    {
+        result.push(match);
+    }
+    return result;
+}
+
+const getWindowsDrives = () => new Promise<string[]>
+(
+    resolve =>
+    {
+        child_process.exec
+        (
+            "wmic logicaldisk get name",
+            (error, stdout) =>
+            {
+                console.error(`wmic logicaldisk get name: ${error}`);
+                resolve
+                (
+                    regExpExecToArray
+                    (
+                        /^\s*([A-Za-z]\:)\s*$/gm,
+                        stdout
+                    )
+                    .map(i => i[1])
+                );
+            }
+        );
+    }
+);
 
 const makeOcticonSVG = (octicon: Octicon | keyof typeof octicons) => <SVGElement>minamo.dom.make
 ({
@@ -112,6 +151,9 @@ export const onload = async () =>
         ]
     );
     renderDirs(document.body, "/");
+
+    console.log(`isWindows: ${isWindows}`);
+    console.log(`getWindowsDrives: ${JSON.stringify(await getWindowsDrives())}`);
 };
 
 export const setConfig = (json: string) =>
