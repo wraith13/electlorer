@@ -1,12 +1,16 @@
-ul.dirs {
+ul.dirs,
+ul.drives {
   padding-left: 0px;
 }
-ul.dirs > li {
+ul.dirs > li,
+ul.drives > li {
   list-style: none;
 }
-ul.dirs > li > span > svg {
+ul.dirs > li > span > svg,
+ul.drives > li > span > svg {
   padding-right: 4px;
 }
-ul.dirs > li > ul.dirs {
+ul.dirs > li > ul.dirs,
+ul.drives > li > ul.dirs {
   padding-left: 20px;
 }

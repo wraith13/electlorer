@@ -32,7 +32,10 @@ const getWindowsDrives = () => new Promise<string[]>
             "wmic logicaldisk get name",
             (error, stdout) =>
             {
-                console.error(`wmic logicaldisk get name: ${error}`);
+                if (minamo.core.exists(error))
+                {
+                    console.error(`wmic logicaldisk get name: ${error}`);
+                }
                 resolve
                 (
                     regExpExecToArray
@@ -83,7 +86,11 @@ const renderDir = async (path: string): Promise<HTMLLIElement> =>
             {
                 console.log(`open "${path}"`);
                 label.onclick = () => { };
-                await renderDirs(result, path);
+                minamo.dom.appendChildren
+                (
+                    result,
+                    await renderDirs(path)
+                );
                 label.onclick = close;
             };
             const close = async () =>
@@ -117,25 +124,40 @@ const renderDir = async (path: string): Promise<HTMLLIElement> =>
     }
     return result;
 }
-const renderDirs = async (parent: Element, path: string) => minamo.dom.appendChildren
-(
-    parent,
-    {
-        tag: "ul",
-        className: "dirs",
-        children:
+const renderDirs = async (path: string) =>
+({
+    tag: "ul",
+    className: "dirs",
+    children:
+    (
+        await Promise.all<HTMLLIElement>
         (
-            await Promise.all<HTMLLIElement>
+            (await fs.promises.readdir(path)).map
             (
-                (await fs.promises.readdir(path)).map
-                (
-                    async i => await renderDir(`${"/" === path ? "": path}/${i}`)
-                )
+                async i => await renderDir(`${path.replace(/\/$/, "")}/${i}`)
             )
         )
-        .filter(i => i)
-    }
-);
+    )
+    .filter(i => i)
+});
+
+const renderRoot = async () => isWindows ?
+{
+    tag: "ul",
+    className: "drives",
+    children:
+    (
+        await Promise.all<HTMLLIElement>
+        (
+            (await getWindowsDrives()).map
+            (
+                async i => await renderDir(`${i}/`)
+            )
+        )
+    )
+    .filter(i => i)
+}:
+await renderDirs("/");
 
 export const onload = async () =>
 {
@@ -147,10 +169,11 @@ export const onload = async () =>
                 tag: "p",
                 children: "Hello, minamo.js!"
             },
-            makeOcticonSVG("bell")
+            makeOcticonSVG("bell"),
+            await renderRoot()
+            //await renderDirs("/")
         ]
     );
-    renderDirs(document.body, "/");
 
     console.log(`isWindows: ${isWindows}`);
     console.log(`getWindowsDrives: ${JSON.stringify(await getWindowsDrives())}`);
