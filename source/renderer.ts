@@ -6,22 +6,27 @@ import { minamo } from "./minamo";
 import * as fs from 'fs';
 import octicons, { Octicon } from "typed-octicons";
 import * as os from "os";
-import * as child_process from "child_process";
+//import * as child_process from "child_process";
+import wmic from "@wraith13/wmic";
 
 let config: any;
 
 const isWindows = "win32" === os.platform();
 
-export const regExpExecToArray = (regexp: RegExp, text: string): RegExpExecArray[] =>
+const getWindowsDrives = async () => (await wmic("logicaldisk")).map(i => i.Name);
+
+/*
+const iteratorToArray = <T>(iterator: () => T): T[] =>
 {
-    const result: RegExpExecArray[] = [];
-    let match: RegExpExecArray;
-    while(match = regexp.exec(text))
+    const result: T[] = [];
+    let current: T;
+    while(current = iterator())
     {
-        result.push(match);
+        result.push(current);
     }
     return result;
 }
+const regExpExecToArray = (regexp: RegExp, text: string): RegExpExecArray[] => iteratorToArray(() => regexp.exec(text));
 
 const getWindowsDrives = () => new Promise<string[]>
 (
@@ -49,6 +54,7 @@ const getWindowsDrives = () => new Promise<string[]>
         );
     }
 );
+*/
 
 const makeOcticonSVG = (octicon: Octicon | keyof typeof octicons) => <SVGElement>minamo.dom.make
 ({
