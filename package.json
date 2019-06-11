@@ -23,6 +23,6 @@
   },
   "dependencies": {
     "@wraith13/wmic": "^1.0.1",
-    "typed-octicons": "^1.0.0"
+    "typed-octicons": "^9.0.1"
   }
 }
