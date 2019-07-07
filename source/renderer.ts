@@ -65,6 +65,8 @@ const makeOcticonSVG = (octicon: Octicon | keyof typeof octicons) => <SVGElement
             octicon
         )
         .toSVG()
+        .replace(/ width=\"(.*?)\" /, " ")
+        .replace(/ height=\"(.*?)\" /, " ")
 });
 
 const renderDir = async (path: string): Promise<HTMLLIElement> =>
