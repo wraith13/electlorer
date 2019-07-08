@@ -15,47 +15,6 @@ const isWindows = "win32" === os.platform();
 
 const getWindowsDrives = async () => (await wmic("logicaldisk")).map(i => i.Name);
 
-/*
-const iteratorToArray = <T>(iterator: () => T): T[] =>
-{
-    const result: T[] = [];
-    let current: T;
-    while(current = iterator())
-    {
-        result.push(current);
-    }
-    return result;
-}
-const regExpExecToArray = (regexp: RegExp, text: string): RegExpExecArray[] => iteratorToArray(() => regexp.exec(text));
-
-const getWindowsDrives = () => new Promise<string[]>
-(
-    resolve =>
-    {
-        child_process.exec
-        (
-            "wmic logicaldisk get name",
-            (error, stdout) =>
-            {
-                if (minamo.core.exists(error))
-                {
-                    console.error(`wmic logicaldisk get name: ${error}`);
-                }
-                resolve
-                (
-                    regExpExecToArray
-                    (
-                        /^\s*([A-Za-z]\:)\s*$/gm,
-                        stdout
-                    )
-                    .map(i => i[1])
-                );
-            }
-        );
-    }
-);
-*/
-
 const makeOcticonSVG = (octicon: Octicon | keyof typeof octicons) => <SVGElement>minamo.dom.make
 ({
     outerHTML:
