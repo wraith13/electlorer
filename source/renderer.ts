@@ -31,7 +31,7 @@ const makeOcticonSVG = (octicon: Octicon | keyof typeof octicons) => <SVGElement
 const renderDir = async (path: string): Promise<HTMLLIElement> =>
 {
     let result = <HTMLLIElement>null;
-    const name = path.replace(/.*\/([^\/]+)/, "$1")
+    const name = path.replace(/.*\/([^\/]+)/, "$1");
     try
     {
         const stat = await fs.promises.stat(path);
@@ -90,7 +90,7 @@ const renderDir = async (path: string): Promise<HTMLLIElement> =>
         });
     }
     return result;
-}
+};
 const renderDirs = async (path: string) =>
 ({
     tag: "ul",
