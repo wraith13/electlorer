@@ -18,3 +18,9 @@ ul.dirs > li > ul.dirs,
 ul.drives > li > ul.dirs {
   padding-left: 20px;
 }
+.octicon-file-directory {
+  fill: #888844;
+}
+.octicon-circle-slash {
+  fill: #AA2222;
+}
