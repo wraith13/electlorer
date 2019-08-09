@@ -132,11 +132,11 @@ export const onload = async () =>
     (
         document.body,
         [
-            {
-                tag: "p",
-                children: "Hello, minamo.js!"
-            },
-            makeOcticonSVG("bell"),
+            //{
+            //    tag: "p",
+            //    children: "Hello, minamo.js!"
+            //},
+            //makeOcticonSVG("bell"),
             await renderRoot()
             //await renderDirs("/")
         ]
