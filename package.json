@@ -17,7 +17,7 @@
   "author": "wraith13",
   "license": "SEE LICENSE IN LICENSE_1_0.txt",
   "devDependencies": {
-    "electron": "^4.0.3",
+    "electron": "^4.2.9",
     "less": "^3.9.0",
     "typescript": "^3.4.5"
   },
